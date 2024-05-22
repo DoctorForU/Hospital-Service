@@ -15,9 +15,10 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.util.DefaultUriBuilderFactory;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
-
+import java.net.URI;
 @Service
 public class HospitalService {
 
@@ -28,17 +29,27 @@ public class HospitalService {
 
     private static final String PUBLIC_DATA_API_URL = "https://apis.data.go.kr/B552657/HsptlAsembySearchService/getHsptlMdcncListInfoInqire";
     //private static final String SERVICE_KEY = "K9t4%2FMS1InyhHxC7oJtTEGncK1mWLav7ML0G5XcgX7k37YyN6sL7owPZDulwsO7m0jyVwvEqeoiFQp3c7C%2BKuQ%3D%3D"; // 인코딩된 서비스 키 사용
-    private static final String SERVICE_KEY = "K9t4/MS1InyhHxC7oJtTEGncK1mWLav7ML0G5XcgX7k37YyN6sL7owPZDulwsO7m0jyVwvEqeoiFQp3c7C+KuQ==";
-    private static final String NUM_OF_ROWS = "3000";
+    //private static final String SERVICE_KEY = "K9t4/MS1InyhHxC7oJtTEGncK1mWLav7ML0G5XcgX7k37YyN6sL7owPZDulwsO7m0jyVwvEqeoiFQp3c7C+KuQ=="; // 인코딩이 된..? rest자체에서
+
+    private static final String SERVICE_KEY = "K9t4%2FMS1InyhHxC7oJtTEGncK1mWLav7ML0G5XcgX7k37YyN6sL7owPZDulwsO7m0jyVwvEqeoiFQp3c7C%2BKuQ%3D%3D"; // 인코딩이 된..? rest자체에서
+    private static final String NUM_OF_ROWS = "10";
     private static final String PAGE_NO = "1";
 
     public List<HospitalData> searchHospitals(HospitalRequest request) {
+        DefaultUriBuilderFactory uriBuilderFactory = new DefaultUriBuilderFactory(); // building 하는 요소들 제어
+        uriBuilderFactory.setEncodingMode(DefaultUriBuilderFactory.EncodingMode.NONE); // 인코딩 자체를 멈추기 막아버리기
+        //uriBuilderFactory.setEncodingMode(DefaultUriBuilderFactory.EncodingMode.URI_COMPONENT);
+        restTemplate.setUriTemplateHandler(uriBuilderFactory); // 레스트 템플릿 빌딩 잡기
+
         String apiUrl = buildApiUrl(request);
         logger.info("Constructed API URL: " + apiUrl);
-        String response = restTemplate.getForObject(apiUrl, String.class);
-        logger.info("Response: " + response);
+//        String No25Url = apiUrl.replace("%25", "%");
+        String response = restTemplate.getForObject(apiUrl.replace("%25","%"), String.class); // 혹시 몰라서 한번 더 25 제거
+        String utf8EncodedResponse = new String(response.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8); // 한글 깨지는거 잡기
 
-        return parseXmlResponse(response);
+        logger.info("Response: " + utf8EncodedResponse);
+
+        return parseXmlResponse(utf8EncodedResponse);
     }
 
     private String buildApiUrl(HospitalRequest request) {
@@ -53,7 +64,7 @@ public class HospitalService {
         StringBuilder apiUrl = new StringBuilder(builder.toString());
 
         if (request.getPrimaryOption() != null && !request.getPrimaryOption().isEmpty()) {
-            apiUrl.append("&QZ=").append(encodeValue(request.getPrimaryOption()));
+            apiUrl.append("&QZ=").append(encodeValue(request.getPrimaryOption())); // 미리 인코딩하자  -> 위에 가면 다 막힘
         }
         if (request.getSecondaryOption() != null && !request.getSecondaryOption().isEmpty()) {
             apiUrl.append("&QD=").append(encodeValue(request.getSecondaryOption()));
