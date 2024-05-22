@@ -10,7 +10,7 @@ import reactor.core.publisher.Mono;
 import java.nio.charset.StandardCharsets;
 
 @RestController
-@RequestMapping("/hospital-service")
+@RequestMapping("/hospital-service2")
 public class Hospital_Controller {
     private final HospitalServiceClient hospitalServiceClient;
     private final String serviceKey = "K9t4%2FMS1InyhHxC7oJtTEGncK1mWLav7ML0G5XcgX7k37YyN6sL7owPZDulwsO7m0jyVwvEqeoiFQp3c7C%2BKuQ%3D%3D";
