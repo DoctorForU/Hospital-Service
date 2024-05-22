@@ -15,6 +15,8 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.util.UriComponents;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @Service
 public class HospitalService {
@@ -40,10 +42,15 @@ public class HospitalService {
     }
 
     private String buildApiUrl(HospitalRequest request) {
-        StringBuilder apiUrl = new StringBuilder(PUBLIC_DATA_API_URL);
-        apiUrl.append("?pageNo=").append(PAGE_NO);
-        apiUrl.append("&numOfRows=").append(NUM_OF_ROWS);
-        apiUrl.append("&serviceKey=").append(URLEncoder.encode(SERVICE_KEY, StandardCharsets.UTF_8));
+
+        UriComponents builder = UriComponentsBuilder.fromHttpUrl(PUBLIC_DATA_API_URL)
+                .queryParam("pageNo", PAGE_NO)
+                .queryParam("numOfRows", NUM_OF_ROWS)
+                .queryParam("serviceKey", SERVICE_KEY)
+                .encode()
+                .build();
+
+        StringBuilder apiUrl = new StringBuilder(builder.toString());
 
         if (request.getPrimaryOption() != null && !request.getPrimaryOption().isEmpty()) {
             apiUrl.append("&QZ=").append(encodeValue(request.getPrimaryOption()));
