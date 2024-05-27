@@ -26,7 +26,7 @@ public class HospitalController {
     private HospitalService hospitalService;
 
     @PostMapping("/hospitalsList")
-    public ResponseEntity<?> searchHospitals(@RequestBody HospitalRequest request) {
+    public ResponseEntity<?> searchHospitals(@RequestBody HospitalRequest request) { // FE에서 날린 데이터들 ( 병원명이라던가, 위치)
         logger.info("Received request: " + request);
         return ResponseEntity.ok(hospitalService.searchHospitals(request));
     }

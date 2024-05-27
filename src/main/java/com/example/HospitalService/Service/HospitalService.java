@@ -32,7 +32,7 @@ public class HospitalService {
     //private static final String SERVICE_KEY = "K9t4/MS1InyhHxC7oJtTEGncK1mWLav7ML0G5XcgX7k37YyN6sL7owPZDulwsO7m0jyVwvEqeoiFQp3c7C+KuQ=="; // 인코딩이 된..? rest자체에서
 
     private static final String SERVICE_KEY = "K9t4%2FMS1InyhHxC7oJtTEGncK1mWLav7ML0G5XcgX7k37YyN6sL7owPZDulwsO7m0jyVwvEqeoiFQp3c7C%2BKuQ%3D%3D"; // 인코딩이 된..? rest자체에서
-    private static final String NUM_OF_ROWS = "10";
+    private static final String NUM_OF_ROWS = "3000";
     private static final String PAGE_NO = "1";
 
     public List<HospitalData> searchHospitals(HospitalRequest request) {
