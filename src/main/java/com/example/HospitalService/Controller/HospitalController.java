@@ -1,7 +1,9 @@
 package com.example.HospitalService.Controller;
 
+import com.example.HospitalService.Service.HospitalDetailService;
 import com.example.HospitalService.dto.HospitalRequest;
 import com.example.HospitalService.Service.HospitalService;
+import com.example.HospitalService.dto.HpidRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,10 +27,21 @@ public class HospitalController {
     @Autowired
     private HospitalService hospitalService;
 
+    @Autowired
+    private HospitalDetailService hospitalDetailService;
+
     @PostMapping("/hospitalsList")
     public ResponseEntity<?> searchHospitals(@RequestBody HospitalRequest request) { // FE에서 날린 데이터들 ( 병원명이라던가, 위치)
         logger.info("Received request: " + request);
         return ResponseEntity.ok(hospitalService.searchHospitals(request));
+    }
+
+    @GetMapping("/hospitalDetail")
+    public ResponseEntity<?> getHospitalDetail(@RequestParam String hpid){
+        HpidRequest NewHpid = new HpidRequest();
+        NewHpid.setHpid(hpid);
+        logger.info("Received HPID: " + hpid);
+        return ResponseEntity.ok(hospitalDetailService.getHospitalDetail(NewHpid));
     }
 
 //    @PostMapping(value = "/hospitalsList2" , produces = "application/xml; charset=UTF-8")
@@ -40,4 +53,7 @@ public class HospitalController {
 //        //return Mono.just(utf8EncodedResponse);
 //    }
 
+
+
 }
+

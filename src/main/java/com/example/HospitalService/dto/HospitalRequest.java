@@ -4,11 +4,11 @@ import lombok.Data;
 
 @Data
 public class HospitalRequest {
-    private String primaryOption = "";
-    private String secondaryOption = "";
-    private String selectedCity = "";
-    private String selectedDistrict = "";
-    private String hospitalName = "";
+    private String primaryOption = ""; // 진료과목 or 기관선택
+    private String secondaryOption = ""; // primaryOption에 따른 두 번째 선택사항 고르기
+    private String selectedCity = "";  // 시
+    private String selectedDistrict = ""; // 시/군/구
+    private String hospitalName = ""; // 병원명
 
     // Getters and Setters
     public String getPrimaryOption() {

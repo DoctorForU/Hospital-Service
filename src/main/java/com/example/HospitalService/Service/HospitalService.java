@@ -35,7 +35,7 @@ public class HospitalService {
     private static final String NUM_OF_ROWS = "3000";
     private static final String PAGE_NO = "1";
 
-    public List<HospitalData> searchHospitals(HospitalRequest request) {
+    public List<HospitalData> searchHospitals(HospitalRequest request) { // api 호출 보내기 함수
         DefaultUriBuilderFactory uriBuilderFactory = new DefaultUriBuilderFactory(); // building 하는 요소들 제어
         uriBuilderFactory.setEncodingMode(DefaultUriBuilderFactory.EncodingMode.NONE); // 인코딩 자체를 멈추기 막아버리기
         //uriBuilderFactory.setEncodingMode(DefaultUriBuilderFactory.EncodingMode.URI_COMPONENT);
@@ -52,7 +52,7 @@ public class HospitalService {
         return parseXmlResponse(utf8EncodedResponse);
     }
 
-    private String buildApiUrl(HospitalRequest request) {
+    private String buildApiUrl(HospitalRequest request) { // api 호출 url 만들기
 
         UriComponents builder = UriComponentsBuilder.fromHttpUrl(PUBLIC_DATA_API_URL)
                 .queryParam("pageNo", PAGE_NO)
@@ -107,6 +107,7 @@ public class HospitalService {
                     hospital.setDutyTime1s(item.path("dutyTime1s").asText());
                     hospital.setWgs84Lat(item.path("wgs84Lat").asText());
                     hospital.setWgs84Lon(item.path("wgs84Lon").asText());
+                    hospital.setHpid(item.path("hpid").asText());
                     hospitals.add(hospital);
                 }
             }

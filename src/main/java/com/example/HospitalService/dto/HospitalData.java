@@ -16,6 +16,7 @@ public class HospitalData {
     private String dutyTime1s;
 
     private String dutyTime2c;
+    private String hpid;
 
     private String wgs84Lat;
     private String wgs84Lon;
