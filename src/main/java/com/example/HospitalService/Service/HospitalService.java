@@ -64,11 +64,28 @@ public class HospitalService {
         StringBuilder apiUrl = new StringBuilder(builder.toString());
 
         if (request.getPrimaryOption() != null && !request.getPrimaryOption().isEmpty()) {
-            apiUrl.append("&QZ=").append(encodeValue(request.getPrimaryOption())); // 미리 인코딩하자  -> 위에 가면 다 막힘
+
+            if(request.getPrimaryOption().equals("department")){
+                if (request.getSecondaryOption() != null && !request.getSecondaryOption().isEmpty()) {
+                    apiUrl.append("&QD=").append(encodeValue(request.getSecondaryOption()));
+                }
+            }
+            if(request.getPrimaryOption().equals("institute")){
+                if (request.getSecondaryOption() != null && !request.getSecondaryOption().isEmpty()) {
+                    apiUrl.append("&QZ=").append(encodeValue(request.getSecondaryOption()));
+                }
+            }
+//            apiUrl.append("&QZ=").append(encodeValue(request.getPrimaryOption())); // 미리 인코딩하자  -> 위에 가면 다 막힘
         }
-        if (request.getSecondaryOption() != null && !request.getSecondaryOption().isEmpty()) {
-            apiUrl.append("&QD=").append(encodeValue(request.getSecondaryOption()));
-        }
+
+
+
+//        if (request.getPrimaryOption() != null && !request.getPrimaryOption().isEmpty()) {
+//            apiUrl.append("&QZ=").append(encodeValue(request.getPrimaryOption())); // 미리 인코딩하자  -> 위에 가면 다 막힘
+//        }
+//        if (request.getSecondaryOption() != null && !request.getSecondaryOption().isEmpty()) {
+//            apiUrl.append("&QD=").append(encodeValue(request.getSecondaryOption()));
+//        }
         if (request.getSelectedCity() != null && !request.getSelectedCity().isEmpty()) {
             apiUrl.append("&Q0=").append(encodeValue(request.getSelectedCity()));
         }
