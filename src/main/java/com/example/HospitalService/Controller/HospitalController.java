@@ -1,6 +1,7 @@
 package com.example.HospitalService.Controller;
 
 import com.example.HospitalService.Service.HospitalDetailService;
+import com.example.HospitalService.Service.MypageRegisterService;
 import com.example.HospitalService.dto.HospitalRequest;
 import com.example.HospitalService.Service.HospitalService;
 import com.example.HospitalService.dto.HpidRequest;
@@ -30,6 +31,9 @@ public class HospitalController {
     @Autowired
     private HospitalDetailService hospitalDetailService;
 
+    @Autowired
+    private MypageRegisterService mypageRegisterService;
+
     @PostMapping("/hospitalsList")
     public ResponseEntity<?> searchHospitals(@RequestBody HospitalRequest request) { // FE에서 날린 데이터들 ( 병원명이라던가, 위치)
         logger.info("Received request: " + request);
@@ -42,6 +46,14 @@ public class HospitalController {
         NewHpid.setHpid(hpid);
         logger.info("Received HPID: " + hpid);
         return ResponseEntity.ok(hospitalDetailService.getHospitalDetail(NewHpid));
+    }
+
+    @GetMapping("/toMypageForDate")
+    public ResponseEntity<?> toMypageRegister(@RequestParam String hpid){
+        logger.info("Received hpid: " +hpid);
+        HpidRequest NewHpid = new HpidRequest();
+        NewHpid.setHpid(hpid);
+        return ResponseEntity.ok(mypageRegisterService.registerDate(NewHpid));
     }
 
 //    @PostMapping(value = "/hospitalsList2" , produces = "application/xml; charset=UTF-8")

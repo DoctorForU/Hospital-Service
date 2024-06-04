@@ -34,10 +34,10 @@ public class HospitalDetailService {
     //private static final String SERVICE_KEY = "K9t4/MS1InyhHxC7oJtTEGncK1mWLav7ML0G5XcgX7k37YyN6sL7owPZDulwsO7m0jyVwvEqeoiFQp3c7C+KuQ=="; // 인코딩이 된..? rest자체에서
 
     private static final String SERVICE_KEY = "K9t4%2FMS1InyhHxC7oJtTEGncK1mWLav7ML0G5XcgX7k37YyN6sL7owPZDulwsO7m0jyVwvEqeoiFQp3c7C%2BKuQ%3D%3D"; // 인코딩이 된..? rest자체에서
-    private static final String NUM_OF_ROWS = "500";
+    private static final String NUM_OF_ROWS = "300";
     private static final String PAGE_NO = "1";
 
-    public List<HospitalDetailData> getHospitalDetail(HpidRequest hpid) { // api 호출 보내기 함수
+    public HospitalDetailData getHospitalDetail(HpidRequest hpid) { // api 호출 보내기 함수
         DefaultUriBuilderFactory uriBuilderFactory = new DefaultUriBuilderFactory(); // building 하는 요소들 제어
         uriBuilderFactory.setEncodingMode(DefaultUriBuilderFactory.EncodingMode.NONE); // 인코딩 자체를 멈추기 막아버리기
         restTemplate.setUriTemplateHandler(uriBuilderFactory); // 레스트 템플릿 빌딩 잡기
@@ -70,20 +70,17 @@ public class HospitalDetailService {
         return apiUrlStr;
     }
 
-    private String encodeValue(String value) {
-        return URLEncoder.encode(value, StandardCharsets.UTF_8);
-    }
+//    private String encodeValue(String value) {
+//        return URLEncoder.encode(value, StandardCharsets.UTF_8);
+//    }
 
-    private List<HospitalDetailData> parseXmlResponse(String response) {
-        List<HospitalDetailData> hospitals = new ArrayList<>();
+    private HospitalDetailData parseXmlResponse(String response) {
+        HospitalDetailData detailData  = new HospitalDetailData();
         try {
             XmlMapper xmlMapper = new XmlMapper();
             JsonNode root = xmlMapper.readTree(response.getBytes(StandardCharsets.UTF_8));
-            JsonNode items = root.path("body").path("items").path("item");
+            JsonNode item = root.path("body").path("items").path("item");
 
-            if (items.isArray()) { // Array가 필요할가..?
-                for (JsonNode item : items) {
-                    HospitalDetailData detailData = new HospitalDetailData();
                     // 여기 처리 필요함
                     detailData.setHpid(item.path("hpid").asText());
                     detailData.setDutyAddr(item.path("dutyAddr").asText());
@@ -172,12 +169,11 @@ public class HospitalDetailService {
                     detailData.setO037(item.path("o037").asText());
                     detailData.setO038(item.path("o038").asText());
 
-                    hospitals.add(detailData);
-                }
-            }
+
         } catch (Exception e) {
             logger.error("Error parsing XML response", e);
         }
-        return hospitals;
+        logger.info("Parsed hospital detail data: " + detailData.toString());
+        return detailData;
     }
 }
