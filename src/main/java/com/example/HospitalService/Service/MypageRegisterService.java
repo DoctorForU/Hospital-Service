@@ -100,8 +100,4 @@ public class MypageRegisterService {
         logger.info("Parsed hospital detail data: " + dataDate.toString());
         return dataDate;
     }
-
-
-
-
 }

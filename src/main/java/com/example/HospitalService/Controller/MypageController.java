@@ -18,7 +18,7 @@ import java.util.Collections;
 import java.util.List;
 
 @RestController
-@RequestMapping("/hospital-service")
+@RequestMapping("/hospital-service3")
 public class MypageController {
     private static final Logger logger = LoggerFactory.getLogger(HospitalController.class);
 
