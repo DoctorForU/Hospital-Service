@@ -34,6 +34,15 @@ public class HospitalController {
     @Autowired
     private MypageRegisterService mypageRegisterService;
 
+//    @GetMapping("/health-check")
+//    public String status(){
+//        return String.format("It's Working in Hospital Service"
+//            + ", port(local.server.port)=  " + env.getProperty("local.server.port")
+//                        + ", port(local.server.port)=  " + env.getProperty("local.server.port")
+//
+//                )"It's Working in Hospital Service"port(local.server.port)= "
+//    }
+
     @PostMapping("/hospitalsList")
     public ResponseEntity<?> searchHospitals(@RequestBody HospitalRequest request) { // FE에서 날린 데이터들 ( 병원명이라던가, 위치)
         logger.info("Received request: " + request);
