@@ -1,7 +1,9 @@
 package com.example.HospitalService.Controller;
 
+import com.example.HospitalService.Service.FavoriteHospitalService;
 import com.example.HospitalService.Service.HospitalDetailService;
 import com.example.HospitalService.Service.MypageRegisterService;
+import com.example.HospitalService.dto.FavoriteHospitalResponse;
 import com.example.HospitalService.dto.HospitalRequest;
 import com.example.HospitalService.Service.HospitalService;
 import com.example.HospitalService.dto.HpidRequest;
@@ -34,6 +36,9 @@ public class HospitalController {
     @Autowired
     private MypageRegisterService mypageRegisterService;
 
+    @Autowired
+    private FavoriteHospitalService favoriteHospitalService;
+
 //    @GetMapping("/health-check")
 //    public String status(){
 //        return String.format("It's Working in Hospital Service"
@@ -65,14 +70,17 @@ public class HospitalController {
         return ResponseEntity.ok(mypageRegisterService.registerDate(NewHpid));
     }
 
-//    @PostMapping(value = "/hospitalsList2" , produces = "application/xml; charset=UTF-8")
-//    public Mono<String> getHospitals() {
-//
-//
-//        //String response = hospitalServiceClient.getHospitals(serviceKey, 10000, 1, "110000","110001"); // 서울 강남 10000개까지 돌릴 수 있음 => 10000개를 해야함
-//        //String utf8EncodedResponse = new String(response.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8); // 일단 이걸로 utf-8 문제 해결
-//        //return Mono.just(utf8EncodedResponse);
-//    }
+    @GetMapping("/registerFavoriteHospital")
+    public ResponseEntity<FavoriteHospitalResponse> registerFavoriteHospital(@RequestParam String hpid){
+        HpidRequest NewHpid = new HpidRequest();
+        NewHpid.setHpid(hpid);
+        logger.info("Received HPID: " + hpid);
+        return ResponseEntity.ok(favoriteHospitalService.registerFavoriteHospital(NewHpid));
+    }
+
+
+
+
 
 
 
