@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.DefaultUriBuilderFactory;
@@ -22,7 +23,8 @@ import java.util.List;
 public class MypageRegisterService {
     private static final Logger logger = LoggerFactory.getLogger(HospitalService.class);
     private static final String PUBLIC_DATA_API_URL = "http://apis.data.go.kr/B552657/HsptlAsembySearchService/getHsptlBassInfoInqire";
-    private static final String SERVICE_KEY = "K9t4%2FMS1InyhHxC7oJtTEGncK1mWLav7ML0G5XcgX7k37YyN6sL7owPZDulwsO7m0jyVwvEqeoiFQp3c7C%2BKuQ%3D%3D"; // 인코딩이 된..? rest자체에서
+    @Value("${api.service.key}")
+    private String SERVICE_KEY;
     private static final String NUM_OF_ROWS = "200";
     private static final String PAGE_NO = "1";
 
