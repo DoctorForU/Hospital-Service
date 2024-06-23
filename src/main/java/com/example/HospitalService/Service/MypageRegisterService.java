@@ -8,6 +8,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.client.circuitbreaker.CircuitBreaker;
+import org.springframework.cloud.client.circuitbreaker.CircuitBreakerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.DefaultUriBuilderFactory;
@@ -30,6 +32,22 @@ public class MypageRegisterService {
 
     @Autowired
     private RestTemplate restTemplate;
+
+    @Autowired
+    private CircuitBreakerFactory circuitBreakerFactory;
+
+    public String callExternalService() {
+        // 특정 회로 차단기 설정을 사용 (여기서는 'circuitBreaker1')
+        CircuitBreaker circuitBreaker = circuitBreakerFactory.create("circuitBreaker1");
+
+        return circuitBreaker.run(() -> restTemplate.getForObject("http://external-service/api", String.class),
+                throwable -> fallbackMethod(throwable));
+    }
+
+    public String fallbackMethod(Throwable throwable) {
+        // 외부 서비스 호출 실패 시 대체 로직
+        return "Fallback response";
+    }
 
     private String buildApiUrl(HpidRequest hpid) { // api 호출 url 만들기
 
@@ -54,7 +72,14 @@ public class MypageRegisterService {
 
         String apiUrl = buildApiUrl(hpid); //hpid 보내기
         logger.info("Constructed API URL: " + apiUrl);
-        String response = restTemplate.getForObject(apiUrl.replace("%25","%"), String.class); // 혹시 몰라서 한번 더 25 제거
+
+        // 서킷달기
+        CircuitBreaker circuitBreaker = circuitBreakerFactory.create("circuitBreaker1");
+
+        String response = circuitBreaker.run(() -> restTemplate.getForObject(apiUrl.replace("%25","%"), String.class),
+                throwable -> fallbackMethod(throwable));
+
+        //String response = restTemplate.getForObject(apiUrl.replace("%25","%"), String.class); // 혹시 몰라서 한번 더 25 제거
         String utf8EncodedResponse = new String(response.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8); // 한글 깨지는거 잡기
 
         logger.info("Response: " + utf8EncodedResponse);

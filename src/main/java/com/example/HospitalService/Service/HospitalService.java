@@ -29,12 +29,9 @@ public class HospitalService {
     private RestTemplate restTemplate;
 
     private static final String PUBLIC_DATA_API_URL = "https://apis.data.go.kr/B552657/HsptlAsembySearchService/getHsptlMdcncListInfoInqire";
-    //private static final String SERVICE_KEY = "K9t4%2FMS1InyhHxC7oJtTEGncK1mWLav7ML0G5XcgX7k37YyN6sL7owPZDulwsO7m0jyVwvEqeoiFQp3c7C%2BKuQ%3D%3D"; // 인코딩된 서비스 키 사용
-    //private static final String SERVICE_KEY = "K9t4/MS1InyhHxC7oJtTEGncK1mWLav7ML0G5XcgX7k37YyN6sL7owPZDulwsO7m0jyVwvEqeoiFQp3c7C+KuQ=="; // 인코딩이 된..? rest자체에서
 
-    //private static final String SERVICE_KEY = "K9t4%2FMS1InyhHxC7oJtTEGncK1mWLav7ML0G5XcgX7k37YyN6sL7owPZDulwsO7m0jyVwvEqeoiFQp3c7C%2BKuQ%3D%3D"; // 인코딩이 된..? rest자체에서
     @Value("${api.service.key}")
-    private String SERVICE_KEY;
+    private String SERVICE_KEY; // config server에서 관리
     private static final String NUM_OF_ROWS = "3000";
     private static final String PAGE_NO = "1";
 
